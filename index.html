@@ -1,1 +1,670 @@
-Hello, World
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1440">
+<title>ДИТ.Школа — Фулл-стек аналитик</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- Основной шрифт макета — Google Sans (в Figma). Публичной кириллической версии нет,
+     поэтому подключён Onest как ближайшая замена; если Google Sans установлен у пользователя — возьмётся он.
+     Вторичный шрифт макета — Open Sans. -->
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#EEEEEE;
+    --dark:#202124;
+    --white:#FFFFFF;
+    --yellow:#FFD200;
+    --yellow-muted:#DABD3A;
+    --yellow-soft:#F5E180;
+    --grey:#9E9B9B;
+    --grey-2:#7C7C7D;
+    --grey-panel:#E4E4E4;
+    --tag:#DEDEDE;
+    --line:#454548;
+    --link:#2563EB;
+    --f-main:"Onest",Arial,sans-serif;
+    --f-alt:"Open Sans","Noto Sans",Arial,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{min-width:1280px;background:var(--bg);color:var(--dark);font-family:var(--f-main);
+       -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+  a{color:inherit;text-decoration:none}
+  img{display:block}
+  ul{list-style:none}
+  .wrap{width:1120px;margin:0 auto;position:relative}
+  .alt{font-family:var(--f-alt)}
+  .h2{font-size:57px;line-height:64px;font-weight:500;letter-spacing:-0.5px}
+  .dark{background:var(--dark);color:var(--white)}
+
+  /* ---------- Кнопка ---------- */
+  .btn{display:inline-flex;align-items:center;justify-content:center;height:50px;padding:0 20px;
+       border-radius:25px;background:var(--yellow);color:var(--dark);font-size:19.5px;line-height:22px;
+       font-weight:400;cursor:pointer;border:0;transition:filter .15s}
+  .btn:hover{filter:brightness(.95)}
+
+  /* ---------- Hero ---------- */
+  .hero{position:relative;height:752px;overflow:hidden}
+  .hero__img{position:absolute;left:calc(50% - 440px);top:150px;width:1160px;height:602px}
+  .header{position:relative;z-index:2;height:96px;display:flex;align-items:center;justify-content:space-between}
+  .logo{font-size:31px;line-height:34px;font-weight:700;letter-spacing:-0.2px}
+  .nav{display:flex;gap:50px;font-size:15.7px;line-height:20px;margin-right:1px}
+  .nav a:hover{opacity:.6}
+  .hero__content{position:relative;z-index:2;padding-top:135px}
+  .hero__title{font-size:66px;line-height:77px;font-weight:500;letter-spacing:-0.5px}
+  .hero__list{margin-top:36px;font-family:var(--f-alt);font-size:24px;line-height:30px}
+  .hero__list li{position:relative;padding-left:27px;margin-bottom:15px}
+  .hero__list li::before{content:"";position:absolute;left:0;top:12px;width:8px;height:8px;border-radius:50%;background:var(--dark)}
+  .hero__list b{font-weight:700}
+  .hero .btn{margin-top:12px}
+
+  /* ---------- Тёмная плашка ---------- */
+  .intro{height:398px;text-align:center;padding-top:119px}
+  .intro__title{font-size:38px;line-height:42px;font-weight:500}
+  .intro__text{margin-top:12px;font-family:var(--f-alt);font-size:24px;line-height:29px}
+
+  /* ---------- Кому подойдёт ---------- */
+  .who{padding:118px 0 0}
+  .who__cards{margin-top:40px;display:grid;grid-template-columns:repeat(3,362px);gap:17px}
+  .who-card{height:606px;border:2px solid var(--dark);border-radius:36px;padding:0 30px 30px;
+            display:flex;flex-direction:column}
+  .who-card__img{height:300px;display:flex;justify-content:center;padding-top:23px}
+  .who-card__img img{height:300px}
+  .who-card:nth-child(n+2){padding-bottom:43px}
+  .who-card__body{margin-top:auto}
+  .who-card__title{font-size:39px;line-height:42px;font-weight:500}
+  .who-card__text{margin-top:12px;font-size:19.5px;line-height:22px}
+
+  /* ---------- Программа ---------- */
+  .program{padding-top:240px}
+  .program__body{margin-top:39px;display:flex;gap:41px}
+  .tabs{display:flex;flex-direction:column;gap:8px;width:172px;flex:none}
+  .tab{height:48px;border:2px solid var(--dark);border-radius:24px;background:transparent;
+       font-family:var(--f-main);font-size:20px;line-height:24px;color:var(--dark);cursor:pointer}
+  .tab.is-active{background:var(--yellow)}
+  .tab:not(.is-active):hover{background:#E4E4E4}
+  .panel{flex:1;min-height:657px;border:2px solid var(--line);border-radius:40px;padding:30px 32px 40px}
+  .panel[hidden]{display:none}
+  .panel__title{font-size:32px;line-height:35px;font-weight:500}
+  .badge{display:inline-block;vertical-align:4px;margin-left:10px;height:26px;padding:0 10px;border-radius:13px;
+         background:var(--white);font-size:14px;line-height:26px;font-weight:700}
+  .tags{display:flex;flex-wrap:wrap;gap:8px 8px;margin-top:30px}
+  .tag{height:28px;padding:0 10px;border-radius:14px;background:var(--tag);font-size:15.5px;line-height:28px}
+  .panel__text{margin-top:33px;font-size:19.5px;line-height:22px}
+  .panel__sub{margin-top:60px;font-size:19.5px;line-height:22px;font-weight:700}
+  .dots{margin-top:16px;font-size:19.8px;line-height:22px}
+  .dots li{position:relative;padding-left:16px;margin-bottom:8px}
+  .dots li::before{content:"";position:absolute;left:0;top:13px;width:7px;height:7px;border-radius:50%;background:var(--yellow)}
+  .soft-item{margin-top:28px}
+  .soft-item__title{font-size:22px;line-height:28px;font-weight:600}
+  .soft-item .badge{background:var(--tag)}
+  .soft-item p{margin-top:8px;font-size:19.5px;line-height:22px}
+
+  /* ---------- Календарь ---------- */
+  .calendar{padding-top:120px;padding-bottom:120px}
+  .calendar__text{margin-top:33px;font-size:19.5px;line-height:22px}
+  .hl{background:var(--yellow-soft);padding:1px 2px}
+  .calendar__body{margin-top:38px;display:flex;gap:16px}
+  .stats{width:552px;display:flex;flex-direction:column;gap:15px}
+  .stat{height:121px;background:var(--white);border-radius:30px;padding:0 40px 0 32px;
+        display:flex;align-items:center;justify-content:space-between}
+  .stat__label{font-size:24.5px;line-height:29px}
+  .stat__value{text-align:right;font-size:55px;line-height:52px;font-weight:600}
+  .stat__value small{display:block;font-size:28px;line-height:34px;font-weight:600}
+  .month{width:552px;position:relative}
+  .month__tabs{display:flex;gap:13px;height:44px}
+  .month__tab{width:128px;height:56px;border-radius:20px 20px 0 0;background:#D4D4D4;color:var(--grey);
+              font-family:var(--f-main);font-size:16.5px;line-height:44px;border:0;text-align:center;padding-right:2px}
+  .month__tab.is-active{background:#DAD9D9;color:var(--dark);position:relative;z-index:1}
+  .month__panel{position:relative;z-index:1;height:484px;background:#DAD8D8;border-radius:0 30px 30px 30px;padding:28px 35px 0}
+  .month__title{text-align:center;font-size:31px;line-height:36px;font-weight:600}
+  .days{margin-top:14px;display:grid;grid-template-columns:repeat(7,62px);column-gap:8px;row-gap:8px;position:relative}
+  .wd{text-align:center;font-size:15px;line-height:20px;color:#4F4F51;margin-bottom:8px}
+  .d{height:62px;border:2px solid #4F4F51;border-radius:8px;background:#D7D6D6;color:#4F4F51;
+     display:flex;align-items:center;justify-content:center;font-size:15px;position:relative;overflow:hidden}
+  .d span{position:relative;z-index:1}
+  .d--half::after{content:"";position:absolute;left:0;right:0;bottom:0;height:50%;background:var(--yellow-muted)}
+  .d--muted{background:var(--yellow-muted)}
+  .d--on{border-color:var(--dark);color:var(--dark);background:var(--yellow)}
+  .d--on.d--half{background:var(--white)}
+  .d--on.d--half::after{background:var(--yellow)}
+  .tip{position:absolute;z-index:3;background:var(--white);border:2px solid var(--dark);border-radius:8px;
+       padding:5px 14px 6px 13px;font-size:15px;line-height:20px;white-space:nowrap}
+  .tip b{display:block;font-weight:700;margin-bottom:6px}
+  .tip i{font-style:normal;color:var(--grey);margin-left:5px}
+  .tip svg{position:absolute;left:-18px;top:24px}
+
+  /* ---------- Как устроено ---------- */
+  .how{padding-top:117px;padding-bottom:121px}
+  .how__grid{margin-top:41px;display:grid;grid-template-columns:repeat(2,550px);gap:17px}
+  .how-card{height:409px;border:2px solid var(--white);border-radius:36px;padding:30px 30px 0 30px}
+  .how-card img{width:80px;height:82px;margin-left:-2px}
+  .how-card h3{margin-top:32px;font-size:38.5px;line-height:42px;font-weight:500}
+  .how-card p{margin-top:15px;font-size:19.5px;line-height:22px}
+  .how-card p+p{margin-top:22px}
+  .how-card .alt{font-size:20px;line-height:22px}
+
+  /* ---------- Подача заявок ---------- */
+  .apply{padding-top:120px;padding-bottom:118px}
+  .apply .h2 span,.select .h2 span{font-size:36px;line-height:40px;font-weight:500;margin-left:12px;color:var(--grey-2)}
+  .apply__sub{margin-top:30px;font-size:18px;line-height:22px}
+  .steps{margin-top:40px;display:grid;grid-template-columns:552px 552px;gap:16px}
+  .step{background:var(--white);border-radius:40px;height:630px;padding:32px 32px 39px;display:flex;flex-direction:column}
+  .step__num{font-size:37px;line-height:44px;font-weight:500;color:var(--grey)}
+  .step__title{margin-top:98px;min-height:70px;font-size:32px;line-height:35px;font-weight:500}
+  .step__text{margin-top:32px;font-size:23.5px;line-height:29px}
+  .step__text+.step__text{margin-top:8px}
+  .step__text.alt{font-size:24px}
+  .tipline{margin-top:auto;display:flex;flex-direction:column;align-items:flex-start}
+  .chip{display:inline-block;height:26px;padding:0 8px;border-radius:5px;background:var(--yellow);
+        font-size:14px;line-height:26px;font-weight:700}
+  .tipline p{margin-top:8px;font-size:15.5px;line-height:18px}
+
+  .step3{position:relative;margin-top:16px;background:var(--white);border-radius:40px;padding:32px 32px 34px}
+  .step3__top{height:256px;display:flex;flex-direction:column;justify-content:space-between}
+  .step3__top .step__title{margin-top:0}
+  .cut{position:absolute;top:0;right:0;width:568px;height:318px;background:var(--bg);
+       border-bottom-left-radius:40px;padding:0 0 18px 16px}
+  .cut::before,.cut::after{content:"";position:absolute;width:40px;height:40px;
+       background:radial-gradient(circle at 0 100%,transparent 39.5px,var(--bg) 40px)}
+  .cut::before{left:-40px;top:0}
+  .cut::after{right:0;bottom:-40px}
+  .about{height:300px;background:var(--grey-panel);border-radius:30px;padding:30px 26px 0 32px;position:relative;font-size:16px;line-height:18px}
+  .about h4{font-size:23.5px;line-height:28px;font-weight:700}
+  .about .chip{margin-top:12px;font-size:15px;font-weight:400}
+  .about img{position:absolute;right:24px;top:30px;width:64px;height:64px}
+  .about__cols{margin-top:29px;display:grid;grid-template-columns:208px 1fr;gap:23px}
+  .about a{color:var(--link);text-decoration:underline}
+  .about__ask{margin-top:15px}
+  .about__ask b{font-weight:700}
+  .about__ask li{position:relative;padding-left:24px}
+  .about__ask li::before{content:"";position:absolute;left:10px;top:8px;width:4px;height:4px;border-radius:50%;background:var(--dark)}
+  .step3__bottom{margin-top:61px;font-size:23.5px;line-height:29px}
+  .step3__bottom h5{margin-top:20px;font-size:23.5px;line-height:29px;font-weight:700}
+  .inline-dots{display:flex;gap:16px;margin-top:5px}
+  .inline-dots li{position:relative;padding-left:16px}
+  .inline-dots li::before{content:"";position:absolute;left:0;top:13px;width:7px;height:7px;border-radius:50%;background:var(--yellow)}
+  .tipline--row{display:flex;flex-direction:row;align-items:flex-start;gap:8px;margin-top:34px}
+  .tipline--row p{margin-top:0;font-size:15.5px;line-height:18px;padding-top:-1px}
+
+  /* ---------- Период отбора ---------- */
+  .select{padding-top:120px;padding-bottom:84px;position:relative}
+  .select .h2 span{color:#AAAAAA}
+  .select__img{position:absolute;left:700px;top:61px;width:450px;height:590px}
+  .select__col{width:660px}
+  .select .h2{white-space:nowrap}
+  .select p,.select li{font-family:var(--f-alt);font-size:23px;line-height:29px}
+  .select__lead{margin-top:39px}
+  .select .dots{margin-top:16px}
+  .select .dots li{padding-left:27px;margin-bottom:8px}
+  .select .dots li::before{left:1px;top:50%;margin-top:-4px;width:8px;height:8px}
+  .select__p2{margin-top:25px}
+  .select h3{margin-top:58px;font-size:32px;line-height:40px;font-weight:500}
+  .select__res{margin-top:12px}
+  .select .muted{color:var(--grey)}
+  .select .final{margin-top:26px;font-size:20px;line-height:22px;color:var(--grey)}
+  .select .btn{margin-top:32px;font-family:var(--f-alt);font-size:20px}
+
+  /* ---------- Отзывы ---------- */
+  .reviews{padding-top:58px;padding-bottom:119px;text-align:center}
+  .slider{position:relative;margin-top:118px;display:flex;align-items:center;justify-content:center;gap:32px}
+  .arrow{width:60px;height:60px;border:2px solid var(--dark);border-radius:50%;background:transparent;
+         display:flex;align-items:center;justify-content:center;cursor:pointer;margin-top:42px}
+  .arrow:hover{background:#E4E4E4}
+  .review{position:relative;width:742px;background:var(--white);border-radius:40px;padding:63px 32px 31px;text-align:left}
+  .review__photo{position:absolute;left:50%;top:-43px;transform:translateX(-50%);width:86px;height:86px;border-radius:50%;object-fit:cover}
+  .review__name{text-align:center;font-size:20px;line-height:26px;font-weight:700}
+  .review__role{text-align:center;font-family:var(--f-alt);font-size:15.7px;line-height:20px;margin-top:0}
+  .review__company{text-align:center;font-size:13px;line-height:18px;color:var(--grey);margin-top:8px}
+  .review__text{margin-top:32px;font-size:15.5px;line-height:18px}
+  .review__text p+p{margin-top:18px}
+
+  /* ---------- FAQ ---------- */
+  .faq{padding-top:117px}
+  .faq__title{font-size:56.5px;line-height:68px;font-weight:500}
+  .faq__sub{font-size:31px;line-height:36px;margin-top:6px}
+  .faq__list{margin-top:31px;display:flex;flex-direction:column;gap:8px}
+  .faq-item{background:var(--white);color:var(--dark);border-radius:20px;padding:30px 32px 18px}
+  .faq-item summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:flex-start;
+                    font-size:24px;line-height:28px;font-weight:500}
+  .faq-item summary::-webkit-details-marker{display:none}
+  .faq-item summary i{flex:none;position:relative;width:24px;height:24px;margin-top:-2px}
+  .faq-item summary i::before,.faq-item summary i::after{content:"";position:absolute;left:0;top:10px;width:24px;height:3px;background:var(--dark);transition:transform .2s}
+  .faq-item summary i::after{transform:rotate(90deg)}
+  .faq-item[open] summary i::after{transform:rotate(0)}
+  .faq-item p{white-space:nowrap;margin-top:18px;font-size:19.5px;line-height:22px}
+  .faq-item p.alt{font-size:19.8px;line-height:22px}
+
+  /* ---------- Контакты ---------- */
+  .contacts{padding-top:237px;padding-bottom:153px}
+  .people{margin-top:40px;display:flex;gap:65px}
+  .person{width:172px;text-align:center}
+  .person__ring{width:172px;height:172px;border-radius:50%;border:2px solid var(--line);padding:9px}
+  .person__ring img{width:150px;height:150px;border-radius:50%;object-fit:cover}
+  .person__name{margin-top:14px;font-size:32px;line-height:35px;font-weight:500}
+  .person__role{margin-top:13px;font-family:var(--f-alt);font-size:20px;line-height:22px}
+
+  /* ---------- Футер ---------- */
+  .footer{position:relative;height:456px;overflow:hidden}
+  .footer__img{position:absolute;left:50%;bottom:2px;transform:translateX(-50%);width:1440px;height:344px}
+  .footer .wrap{padding-top:134px;z-index:2}
+  .footer .btn{margin-top:22px}
+</style>
+</head>
+<body>
+
+<!-- ================= HERO ================= -->
+<section class="hero" id="top">
+  <img class="hero__img" src="img/hero.png" alt="">
+  <div class="wrap">
+    <header class="header">
+      <a href="#top" class="logo">ДИТ.Школа</a>
+      <nav class="nav">
+        <a href="#program">Программа</a>
+        <a href="#format">Формат</a>
+        <a href="#reviews">Отзывы</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+    </header>
+    <div class="hero__content">
+      <h1 class="hero__title">Фулл-стек<br>аналитик</h1>
+      <ul class="hero__list">
+        <li>Приём заявок до <b>1&nbsp;декабря 2026</b></li>
+        <li>Старт обучения: <b>январь 2026</b></li>
+        <li>Продолжительность: <b>4&nbsp;месяца</b></li>
+      </ul>
+      <a href="#apply" class="btn">Подать заявку</a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= INTRO ================= -->
+<section class="intro dark">
+  <div class="wrap">
+    <h2 class="intro__title">Направление для тех, кто хочет заниматься<br>проектированием и системным анализом:</h2>
+    <p class="intro__text">от бизнес-анализа и моделирования требований до<br>функционального и технического проектирования, архитектуры и<br>интеграции ИС.</p>
+  </div>
+</section>
+
+<!-- ================= КОМУ ПОДОЙДЁТ ================= -->
+<section class="who">
+  <div class="wrap">
+    <h2 class="h2">Кому подойдёт это направление?</h2>
+    <div class="who__cards">
+      <article class="who-card">
+        <div class="who-card__img"><img src="img/who-1.png" alt=""></div>
+        <div class="who-card__body">
+          <h3 class="who-card__title">Начинающим<br>системным<br>аналитикам</h3>
+          <p class="who-card__text">Уже работаете системным<br>аналитиком и проектируете<br>ИС, но хотите подтянуть свои<br>навыки и расти быстрее</p>
+        </div>
+      </article>
+      <article class="who-card">
+        <div class="who-card__img"><img src="img/who-2.png" alt=""></div>
+        <div class="who-card__body">
+          <h3 class="who-card__title">Бизнес-<br>аналитикам</h3>
+          <p class="who-card__text">Работаете бизнес-аналитиком,<br>но понимаете, что критически<br>важно подтянуть технические<br>знания и навыки<br>по системному анализу</p>
+        </div>
+      </article>
+      <article class="who-card">
+        <div class="who-card__img"><img src="img/who-3.png" alt=""></div>
+        <div class="who-card__body">
+          <h3 class="who-card__title">Фулл-стек<br>аналитикам</h3>
+          <p class="who-card__text">Закрываете в проекте и<br>бизнес-, и системную часть,<br>но чувствуете пробелы в<br>знаниях на отдельных этапах<br>и хотите работать увереннее</p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ПРОГРАММА ================= -->
+<section class="program" id="program">
+  <div class="wrap">
+    <h2 class="h2">Что входит в программу обучения?</h2>
+    <div class="program__body">
+      <div class="tabs" role="tablist">
+        <button class="tab is-active" data-tab="m1" role="tab">Модуль 1</button>
+        <button class="tab" data-tab="m2" role="tab">Модуль 2</button>
+        <button class="tab" data-tab="m3" role="tab">Модуль 3</button>
+        <button class="tab" data-tab="m4" role="tab">Модуль 4</button>
+        <button class="tab" data-tab="soft" role="tab">Soft Skills</button>
+      </div>
+
+      <!-- Модуль 1 — из макета -->
+      <div class="panel" id="m1">
+        <h3 class="panel__title">Бизнес-анализ <span class="badge">18 часов</span><br>и моделирование процессов</h3>
+        <div class="tags"><span class="tag">BPMN</span><span class="tag">VACD</span><span class="tag">DMN</span><span class="tag">Opportunity Canvas</span><span class="tag">Impact Map</span><span class="tag">User Story</span></div>
+        <p class="panel__text">Научитесь понимать, как устроены информационные системы, какую роль играет<br>аналитик в проекте и какие задачи он решает. Разберётесь, как определять границы<br>и содержание проекта, выявлять потребности и формулировать бизнес-требования,<br>а также анализировать текущие процессы и находить возможности для улучшений.</p>
+        <p class="panel__sub">Основные темы:</p>
+        <ul class="dots">
+          <li>понятия информационных и автоматизированных систем,<br>жизненный цикл, роль системного аналитика</li>
+          <li>определение границ и содержания проекта, выявление потребностей<br>и формулирование бизнес-требований</li>
+          <li>моделирование бизнес-процессов, бизнес-правил и данных;<br>причинно-следственный анализ</li>
+          <li>проектирование целевой бизнес-ситуации, работа со стейкхолдерами<br>и описание требований</li>
+        </ul>
+      </div>
+
+      <!-- Модули 2–4 и Soft Skills — в макете не отрисованы; текст взят из лендинга прошлого потока -->
+      <div class="panel" id="m2" hidden>
+        <h3 class="panel__title">Разработка и управление <span class="badge">16 часов</span><br>системными требованиями</h3>
+        <div class="tags"><span class="tag">Use Cases</span><span class="tag">функциональные и нефункциональные требования</span><span class="tag">трассировка требований</span></div>
+        <p class="panel__text">Научитесь превращать бизнес-потребности в системные требования, описывать логику<br>работы будущей системы и структуру данных, прорабатывать пользовательские сценарии<br>и взаимодействия компонентов. Разберётесь, как согласовывать требования, управлять<br>версиями и обеспечивать прозрачность для команды и заказчика.</p>
+        <p class="panel__sub">Основные темы:</p>
+        <ul class="dots">
+          <li>виды системных требований; функциональные и нефункциональные<br>требования, их структура и уровни детализации</li>
+          <li>моделирование данных: сущности, атрибуты, связи;<br>описание информационной структуры системы</li>
+          <li>пользовательские сценарии, сценарии взаимодействия с системой</li>
+          <li>управление требованиями: согласование, изменение, версии и трассировка;<br>взаимодействие аналитика с командой разработки</li>
+        </ul>
+      </div>
+      <div class="panel" id="m3" hidden>
+        <h3 class="panel__title">Архитектура и технологические <span class="badge">30 часов</span><br>основы информационных систем</h3>
+        <div class="tags"><span class="tag">C4 Model</span><span class="tag">PostgreSQL</span><span class="tag">SQLite</span><span class="tag">SQL</span><span class="tag">NoSQL</span><span class="tag">Redis</span><span class="tag">MongoDB</span><span class="tag">Neo4j</span><span class="tag">Webhooks</span><span class="tag">WebSocket</span><span class="tag">RabbitMQ</span><span class="tag">Kafka</span></div>
+        <p class="panel__text">Разберётесь в архитектуре ИС: из каких компонентов она состоит, как сервисы<br>взаимодействуют между собой и с внешними системами. Научитесь понимать архитектурные<br>стили, основы интеграций и подходы к проектированию и эксплуатации реляционных<br>и нереляционных БД. Эти знания помогут принимать технически обоснованные решения.</p>
+        <p class="panel__sub">Основные темы:</p>
+        <ul class="dots">
+          <li>проектирование архитектуры ИС и роль архитектурных компонентов</li>
+          <li>уровни приложений, клиент-серверная модель и принципы взаимодействия сервисов</li>
+          <li>интеграции ИС: подходы, протоколы и способы обмена данными между системами</li>
+          <li>принципы развертывания приложений и организация рабочих окружений</li>
+          <li>реляционные БД: устройство, проектирование, эксплуатация и работа с DML-запросами</li>
+          <li>нереляционные СУБД: key–value, документо-ориентированные и графовые модели</li>
+        </ul>
+      </div>
+      <div class="panel" id="m4" hidden>
+        <h3 class="panel__title">Проектирование структуры <span class="badge">25 часов</span><br>и поведения информационных систем</h3>
+        <div class="tags"><span class="tag">REST</span><span class="tag">SOAP</span><span class="tag">gRPC</span><span class="tag">GraphQL</span><span class="tag">Event Storming</span><span class="tag">DDD</span><span class="tag">UML Class Diagram</span><span class="tag">UML Sequence Diagram</span><span class="tag">UML Activity Diagram</span></div>
+        <p class="panel__text">Научитесь проектировать интерфейсы взаимодействия систем и внутреннюю логику решения.<br>Освоите основные типы API, подходы доменно-ориентированного проектирования<br>и моделирование структуры и поведения объектов в UML. Разберётесь, как описывать<br>взаимодействия компонентов и формировать артефакты для реализации системы.</p>
+        <p class="panel__sub">Основные темы:</p>
+        <ul class="dots">
+          <li>принципы и особенности работы различных типов API: REST, GraphQL, SOAP и gRPC</li>
+          <li>доменно-ориентированное проектирование (DDD) и определение функциональности системы</li>
+          <li>моделирование структуры объектов в терминах ООП и UML (классы, атрибуты, связи)</li>
+          <li>моделирование поведения системы: последовательности, сценарии, взаимодействия</li>
+          <li>описание статической архитектуры системы и формирование проектных артефактов в UML</li>
+        </ul>
+      </div>
+      <div class="panel" id="soft" hidden>
+        <h3 class="panel__title">Soft skills <span class="badge">очно</span></h3>
+        <p class="panel__text" style="margin-top:20px">Развитие в роли — это не только про «харды», но и про умение общаться, мыслить<br>критически и выстраивать рабочие отношения. Все тренинги проходят очно,<br>а часть — совместно с участниками других направлений школы.</p>
+        <div class="soft-item"><h4 class="soft-item__title">Эффективные коммуникации <span class="badge">8 часов · 1 день</span></h4>
+          <p>Вы научитесь выстраивать общение так, чтобы достигать результата: определять цель<br>коммуникации, подбирать аргументы и объяснять сложное простым языком.</p></div>
+        <div class="soft-item"><h4 class="soft-item__title">Критическое мышление <span class="badge">16 часов · 2 дня</span></h4>
+          <p>Вы разберёте, как анализировать информацию, замечать когнитивные искажения, находить<br>логические ошибки и формулировать обоснованные выводы.</p></div>
+        <div class="soft-item"><h4 class="soft-item__title">Разрешение конфликтов <span class="badge">8 часов · 1 день</span></h4>
+          <p>Вы научитесь распознавать манипуляции и неконструктивное поведение, корректно реагировать<br>на сложные диалоги и поддерживать рабочее взаимодействие даже в конфликтных ситуациях.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= КАЛЕНДАРЬ ================= -->
+<section class="calendar">
+  <div class="wrap">
+    <h2 class="h2">Календарь</h2>
+    <p class="calendar__text">Фактическая нагрузка корректируется с учётом результатов входного тестирования и уровня подготовки.<br>Важно заранее учитывать этот объём — <span class="hl">программа длительная, комплексная и требует регулярного вовлечения.</span></p>
+    <div class="calendar__body">
+      <div class="stats">
+        <div class="stat"><div class="stat__label">Длительность<br>обучения</div><div class="stat__value">4<small>месяца</small></div></div>
+        <div class="stat"><div class="stat__label">Нагрузка<br>в неделю</div><div class="stat__value">6–10<small>часов</small></div></div>
+        <div class="stat"><div class="stat__label">Средняя нагрузка<br>за весь период</div><div class="stat__value">~60<small>часов</small></div></div>
+        <div class="stat"><div class="stat__label">Соотношение онлайн<br>и очного обучения</div><div class="stat__value">70/30</div></div>
+      </div>
+
+      <div class="month">
+        <div class="month__tabs">
+          <button class="month__tab is-active">1 месяц</button>
+          <button class="month__tab">2 месяц</button>
+          <button class="month__tab">3 месяц</button>
+          <button class="month__tab">4 месяц</button>
+        </div>
+        <div class="month__panel">
+          <h3 class="month__title">Пример нагрузки на месяц</h3>
+          <div class="days">
+            <div class="wd">ПН</div><div class="wd">ВТ</div><div class="wd">СР</div><div class="wd">ЧТ</div><div class="wd">ПТ</div><div class="wd">СБ</div><div class="wd">ВС</div>
+            <div></div><div></div>
+            <div class="d d--on"><span>01</span></div><div class="d"><span>02</span></div><div class="d"><span>03</span></div><div class="d"><span>04</span></div><div class="d"><span>05</span></div>
+            <div class="d"><span>06</span></div><div class="d d--half"><span>07</span></div><div class="d"><span>08</span></div><div class="d d--half"><span>09</span></div><div class="d"><span>10</span></div><div class="d"><span>11</span></div><div class="d"><span>12</span></div>
+            <div class="d"><span>13</span></div><div class="d d--half"><span>14</span></div><div class="d"><span>15</span></div><div class="d d--on d--half"><span>16</span></div><div class="d"><span>17</span></div><div class="d"><span>18</span></div><div class="d"><span>19</span></div>
+            <div class="d"><span>20</span></div><div class="d d--half"><span>21</span></div><div class="d"><span>22</span></div><div class="d d--half"><span>23</span></div><div class="d"><span>24</span></div><div class="d"><span>25</span></div><div class="d"><span>26</span></div>
+            <div class="d"><span>27</span></div><div class="d"><span>28</span></div><div class="d d--muted"><span>29</span></div><div class="d"><span>30</span></div><div class="d d--on"><span>31</span></div>
+
+            <div class="tip" style="left:202px;top:-8px"><b>Очный тренинг</b>8 часов<i>soft skills</i>
+              <svg width="40" height="48" viewBox="0 0 40 48" fill="none"><path d="M3 44 C2 24 14 10 35 8" stroke="#202124" stroke-width="1.5"/><path d="M29 3 L36 8 L30 13" stroke="#202124" stroke-width="1.5" stroke-linejoin="round"/></svg></div>
+            <div class="tip" style="left:271px;top:124px"><b>Онлайн занятие</b>4 часа<i>hard skills</i>
+              <svg width="40" height="48" viewBox="0 0 40 48" fill="none"><path d="M3 44 C2 24 14 10 35 8" stroke="#202124" stroke-width="1.5"/><path d="M29 3 L36 8 L30 13" stroke="#202124" stroke-width="1.5" stroke-linejoin="round"/></svg></div>
+            <div class="tip" style="left:337px;top:267px"><b>Очное занятие</b>8 часов<i>hard skills</i>
+              <svg width="40" height="48" viewBox="0 0 40 48" fill="none"><path d="M3 44 C2 24 14 10 35 8" stroke="#202124" stroke-width="1.5"/><path d="M29 3 L36 8 L30 13" stroke="#202124" stroke-width="1.5" stroke-linejoin="round"/></svg></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= КАК УСТРОЕНО ================= -->
+<section class="how dark" id="format">
+  <div class="wrap">
+    <h2 class="h2">Как устроено обучение?</h2>
+    <div class="how__grid">
+      <article class="how-card">
+        <img src="img/icon-online.png" alt="">
+        <h3>Онлайн-занятия</h3>
+        <p>Основная часть программы проходит онлайн<br>в живом формате. Это сочетание лекции<br>и практики: вместе разбираете материал,<br>работаете в мини-группах.</p>
+        <p>Можно задавать вопросы, уточнять<br>непонятное и получать обратную связь<br>прямо во время занятия.</p>
+      </article>
+      <article class="how-card">
+        <img src="img/icon-offline.png" alt="">
+        <h3>Очные встречи</h3>
+        <p>Несколько раз за программу встречаемся<br>офлайн — чтобы глубже проработать сложные<br>темы и знакомиться ближе с участниками.</p>
+        <p>На очных сессиях проходят практические<br>тренинги и тематические митапы<br>с внутренними экспертами.</p>
+      </article>
+      <article class="how-card">
+        <img src="img/icon-lms.png" alt="">
+        <h3>Учебная среда</h3>
+        <p>Все материалы собраны в LMS: записи занятий,<br>презентации, полезные ссылки, конспекты<br>и дополнительные материалы.</p>
+        <p>Здесь же можно смотреть прогресс<br>по модулям и понимать, на каком этапе<br>обучения вы сейчас.</p>
+      </article>
+      <article class="how-card">
+        <img src="img/icon-tests.png" alt="">
+        <h3>Контрольные точки</h3>
+        <p>В конце каждого модуля — короткий тест до 30<br>минут. Он помогает понять, что уже<br>закрепилось, а к каким темам стоит вернуться.</p>
+        <p>Результаты помогают и нам — понять, где группе<br>нужна дополнительная поддержка.</p>
+      </article>
+      <article class="how-card">
+        <img src="img/icon-tdm.png" alt="">
+        <h3>TDM-чат</h3>
+        <p>В чате можно быстро задать вопрос<br>или обсудить темы с другими участниками<br>и преподавателями. На связи также куратор,<br>который помогает и напоминает о важных шагах.</p>
+        <p>Это также пространство для неформального<br>общения — место, где формируется<br>и развивается своё сообщество.</p>
+      </article>
+      <article class="how-card">
+        <img src="img/icon-network.png" alt="">
+        <h3>Нетворк</h3>
+        <p class="alt">В мини-группах вы работаете с коллегами из<br>других продуктов и проектов — каждый<br>приносит свой опыт.</p>
+        <p class="alt">Вместе решаете общие задачи, поддерживаете<br>друг друга и обретаете связи, которые остаются<br>после программы.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ПОДАЧА ЗАЯВОК ================= -->
+<section class="apply" id="apply">
+  <div class="wrap">
+    <h2 class="h2">Период подачи заявок<span>16 ноября - 1 декабря</span></h2>
+    <p class="apply__sub">В это время нужно успеть пройти все шаги, чтобы попасть на отбор.</p>
+
+    <div class="steps">
+      <article class="step">
+        <div class="step__num">Шаг 1</div>
+        <h3 class="step__title">Пройти входное<br>тестирование</h3>
+        <p class="step__text">Это обучение не для полного старта<br>с нуля — нужен базовый уровень.</p>
+        <p class="step__text">Тестирование помогает понять, готовы<br>ли вы к программе сейчас, и не станет<br>ли нагрузка чрезмерной.</p>
+        <div class="tipline"><span class="chip">Совет:</span>
+          <p>Проходите тест честно. Нам важно увидеть ваш реальный<br>уровень, чтобы подобрать подходящую траекторию.</p></div>
+      </article>
+      <article class="step">
+        <div class="step__num">Шаг 2</div>
+        <h3 class="step__title">Подать заявку</h3>
+        <p class="step__text alt">После теста на странице программы<br>появится кнопка «Подать заявку».</p>
+        <p class="step__text alt">В анкете важно ответить<br>на вопрос «Для каких задач вам нужно<br>это обучение?» — конкретика помогает<br>понять вашу мотивацию и актуальный<br>контекст работы.</p>
+        <div class="tipline"><span class="chip">Совет:</span>
+          <p>Избегайте формулировок “для общего развития”.<br>Если пока сложно сформулировать — возможно,<br>сейчас не время для обучения.</p></div>
+      </article>
+    </div>
+
+    <article class="step3">
+      <div class="step3__top">
+        <div class="step__num">Шаг 3</div>
+        <h3 class="step__title">Получить согласования<br>руководителя и HRBP</h3>
+      </div>
+      <div class="cut">
+        <div class="about">
+          <h4>Расскажите о себе</h4>
+          <span class="chip">1 по 17 декабря</span>
+          <img src="img/icon-camera.png" alt="">
+          <div class="about__cols">
+            <p>Отправьте короткое видео<br>до 3 минут координатору<br><a href="#">Арине Морозовой.</a></p>
+            <p>Видео помогает нам<br>лучше понять вашу мотивацию<br>и повышает шансы при отборе.</p>
+          </div>
+          <div class="about__ask"><b>Расскажи:</b>
+            <ul>
+              <li>какие темы курса кажутся наиболее важными и почему</li>
+              <li>как планируете выделять 6–10 часов в неделю на обучение</li>
+              <li>любые детали, которые помогут лучше понять ваш контекст</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="step3__bottom">
+        <p>Обучение длится несколько месяцев и проходит в рабочее время. Поэтому важно заранее<br>обсудить своё участие: подходит ли период, есть ли возможность выделять время,<br>видит ли руководитель ценность для вашего развития по этому направлению.</p>
+        <h5>Получить нужно 2 согласования:</h5>
+        <ul class="inline-dots"><li>от непосредственного руководителя</li><li>от HRBP</li></ul>
+        <div class="tipline tipline--row"><span class="chip">Совет:</span>
+          <p>Обсудите участие заранее — важно вовремя получить согласование<br>и “сверить ожидания”, чтобы обучение прошло спокойно и осознанно.</p></div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ================= ПЕРИОД ОТБОРА ================= -->
+<section class="select dark">
+  <div class="wrap">
+    <img class="select__img" src="img/selection.png" alt="">
+    <div class="select__col">
+      <h2 class="h2">Период отбора<span>2 - 23 декабря</span></h2>
+      <p class="select__lead">После закрытия заявок мы формируем общий рейтинг.<br>На решение влияют несколько факторов:</p>
+      <ul class="dots">
+        <li>ваша мотивация и задачи</li>
+        <li>результаты входного тестирования</li>
+        <li>соответствие программы вашей<br>роли и текущим задачам</li>
+        <li>рассказ о себе, если вы его прислали</li>
+      </ul>
+      <p class="select__p2">Если что-то понадобится уточнить, мы можем<br>написать вам или вашему руководителю.<br>Итоговое решение согласовываем с HR-партнёром.</p>
+      <h3>Результаты отбора</h3>
+      <p class="select__res">Письма с решением отбора (принят/ отказ)<br>и дальнейшими шагами придут на почту 23 декабря.<br><span class="muted">Количество мест ограничено, поэтому отказ не всегда<br>говорит о вашей подготовке.</span></p>
+      <p class="final">Если обучение совпадает с вашими целями и планами развития,<br>и вы готовы вкладывать время и силы — присоединяйтесь.</p>
+      <a href="#" class="btn">Подать заявку</a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ОТЗЫВЫ ================= -->
+<section class="reviews" id="reviews">
+  <div class="wrap">
+    <h2 class="h2">Отзывы</h2>
+    <div class="slider">
+      <button class="arrow" aria-label="Предыдущий отзыв"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M20 12H4M10 6l-6 6 6 6" stroke="#202124" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <article class="review">
+        <img class="review__photo" src="img/photo-umerova.jpg" alt="Светлана Умерова">
+        <div class="review__name">Светлана Умерова</div>
+        <div class="review__role">Бизнес-аналитик</div>
+        <div class="review__company">ЕМИАС.Поликлиники</div>
+        <div class="review__text">
+          <p>Супер нестандартное обучение в контуре ДИТ: кросс-функциональная команда,<br>практический подход, разные форматы занятий, внешние преподаватели, внутренние<br>эксперты, харды и софты, взрослый выпускной и приятный мерч.</p>
+          <p>Познакомилась с основами системного анализа, расширила кругозор, научилась<br>работать через API, поняла различия REST и gRPC, Kafka и Rabbit. Появилось понимание,<br>как подходить к проектированию интеграций.</p>
+          <p>Один из основных инсайтов — мир ДИТа намного больше и интереснее, чем кажется.<br>В текущих рабочих буднях редко выпадает шанс познакомиться с командой другого<br>продукта. А в рамках ДИТ.Школы — знакомься на здоровье.</p>
+          <p>Сейчас очень горжусь собой, что прошла этот путь от начала до конца.<br>Если есть внутренний отклик — не стоит сомневаться, точно нужно идти.</p>
+        </div>
+      </article>
+      <button class="arrow" aria-label="Следующий отзыв"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M4 12h16M14 6l6 6-6 6" stroke="#202124" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FAQ ================= -->
+<section class="faq dark" id="faq">
+  <div class="wrap">
+    <h2 class="faq__title">FAQ</h2>
+    <p class="faq__sub">Часто задаваемые вопросы</p>
+    <div class="faq__list">
+      <details class="faq-item" open>
+        <summary>Подходит ли мне обучение, если у меня мало опыта в этой роли?<i></i></summary>
+        <p>Небольшой разрыв — ок. Но если текущая деятельность совсем не связана с направлением, обучение<br>может быть слишком сложным. Входное тестирование и мотивационные вопросы помогут понять,<br>подойдёт ли программа.</p>
+      </details>
+      <details class="faq-item" open>
+        <summary>Нужно ли готовиться к входному тестированию?<i></i></summary>
+        <p class="alt">Нет. Оно оценивает ваш текущий уровень, чтобы понять, готовы ли вы к программе и какая траектория<br>будет посильной. Тестирование работает в обе стороны: если набран небольшой балл, программа<br>окажется слишком сложной, а если результат очень высокий — скорее всего, мы не сможем дать вам много<br>нового. Возможно, тогда вам будет интереснее присоединиться к школе в роли эксперта.</p>
+      </details>
+      <details class="faq-item" open>
+        <summary>Можно ли совмещать обучение с рабочей нагрузкой или другими программами?<i></i></summary>
+        <p class="alt">Да, но обучение проходит в рабочее время и требует регулярного включения. Если у вас уже есть длительная<br>программа или высокая загрузка, важно заранее обсудить это с руководителем и спланировать свой график.</p>
+      </details>
+      <details class="faq-item" open>
+        <summary>Что делать, если я не пройду отбор?<i></i></summary>
+        <p class="alt">Вы можете попасть в резерв — пригласим при появлении места или в следующий поток.<br>Если будет отказ — можно попробовать снова в следующем наборе или выбрать другие<br>направления обучения.</p>
+      </details>
+      <details class="faq-item" open>
+        <summary>Будет ли сертификат после завершения программы?<i></i></summary>
+        <p>Да, участники, успешно выполнившие требования программы, получат сертификат.</p>
+      </details>
+      <details class="faq-item" open>
+        <summary>Повысят ли мне зарплату или дадут новую должность после обучения?<i></i></summary>
+        <p>Программа не гарантирует повышение или новую роль, но может повлиять на карьерные перспективы,<br>если появятся подходящие задачи или вакансии.</p>
+      </details>
+    </div>
+
+    <div class="contacts">
+      <h2 class="h2">С вопросами пишите</h2>
+      <div class="people">
+        <div class="person">
+          <div class="person__ring"><img src="img/photo-morozova-m.jpg" alt="Мария Морозова"></div>
+          <div class="person__name">Мария<br>Морозова</div>
+          <div class="person__role">Руководитель<br>проекта</div>
+        </div>
+        <div class="person">
+          <div class="person__ring"><img src="img/photo-morozova-a.jpg" alt="Арина Морозова"></div>
+          <div class="person__name">Арина<br>Морозова</div>
+          <div class="person__role">Администратор<br>проекта</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ФУТЕР ================= -->
+<footer class="footer">
+  <img class="footer__img" src="img/footer-bike.png" alt="">
+  <div class="wrap">
+    <div class="logo">ДИТ.Школа</div>
+    <a href="#apply" class="btn">Подать заявку</a>
+  </div>
+</footer>
+
+<script>
+  // Переключение модулей программы
+  document.querySelectorAll('.tab').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      document.querySelectorAll('.tab').forEach(function (b) { b.classList.toggle('is-active', b === btn); });
+      document.querySelectorAll('.panel').forEach(function (p) { p.hidden = p.id !== btn.dataset.tab; });
+    });
+  });
+  // Табы месяцев (в макете отрисован только 1-й месяц — визуальное переключение)
+  document.querySelectorAll('.month__tab').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      document.querySelectorAll('.month__tab').forEach(function (b) { b.classList.toggle('is-active', b === btn); });
+    });
+  });
+</script>
+</body>
+</html>
